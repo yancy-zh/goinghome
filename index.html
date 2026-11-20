@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="2026 年 12 月至 2027 年 2 月慕尼黑与中国假期日历和请假计算器">
+  <title>2026-2027 冬季假期计划</title>
+  <style>
+    :root { color: #172019; font-family: "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-width: 320px; background: #eee9df; }
+    button, input { font: inherit; }
+    .planner-shell { min-height: 100vh; display: grid; place-items: center; padding: 28px; background: radial-gradient(circle at 15% 5%, #fbf5d5 0, transparent 26%), #eee9df; }
+    .print-sheet { width: min(1120px, 100%); padding: 34px 44px 24px; background: #fffef9; box-shadow: 0 12px 34px #594d3624; }
+    .page-header { display: flex; align-items: flex-end; justify-content: space-between; padding-bottom: 17px; border-bottom: 2px solid #203e31; }
+    .eyebrow, .section-kicker { margin: 0 0 5px; color: #657069; font: 500 10px/1.2 ui-monospace, monospace; letter-spacing: .15em; }
+    h1, h2, p { margin-top: 0; } h1 { margin-bottom: 4px; font-size: 30px; letter-spacing: .04em; } .subtitle { margin: 0; color: #69726d; font-size: 13px; }
+    .header-mark { display: flex; align-items: center; gap: 9px; color: #a34b33; font: 500 15px ui-monospace, monospace; } .header-mark b { color: #c7a51d; }
+    .calendar-stack { display: grid; gap: 20px; margin: 20px 0; }.month-card { border: 1px solid #d8ddd5; }
+    .month-heading { display: flex; align-items: center; justify-content: space-between; height: 35px; padding: 0 15px; color: #738076; background: #eff2eb; font: 10px ui-monospace, monospace; letter-spacing: .12em; }
+    .month-label { color: #1c3529; font: 600 16px "Noto Sans SC", "Microsoft YaHei", sans-serif; letter-spacing: .03em; }.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
+    .weekday-row > div { padding: 5px 0; color: #69736b; border-right: 1px solid #e0e4df; text-align: center; font-size: 11px; }.weekday-row > div:last-child { border-right: 0; }.weekday-row .weekend-header { color: #a47d05; background: #fff8d8; }
+    .days-grid { grid-auto-rows: 55px; }.day-cell { position: relative; padding: 6px 8px; border-top: 1px solid #e0e4df; border-right: 1px solid #e0e4df; background: #fffef9; }.day-cell:nth-child(7n) { border-right: 0; }.day-cell.empty { background: #fbfaf5; }.day-number { display: block; font: 500 13px ui-monospace, monospace; }.weekend { background: #fff2a9; }.bavaria { color: #113e69; background: #bfe0fb; }.china { color: #8e2e25; background: #ffd0ca; }.overlap { color: #185e3e; background: #c2e8ce; }.holiday-name { display: block; margin-top: 4px; font-size: 10px; font-weight: 600; line-height: 1.25; }
+    .planner-panel { display: grid; grid-template-columns: 1.05fr 2fr; gap: 20px; padding: 19px 21px; border-left: 4px solid #c7a51d; background: #f4f6ef; }.panel-intro h2 { margin-bottom: 5px; font-size: 18px; }.panel-intro p:last-child { margin: 0; color: #657069; font-size: 11px; line-height: 1.5; }.form-row { display: flex; align-items: end; gap: 9px; }.form-row label { flex: 1; display: grid; gap: 5px; color: #4d5b51; font-size: 11px; }.form-row input { width: 100%; min-width: 0; padding: 8px; color: #21352a; border: 1px solid #bdc8bd; border-radius: 0; background: white; font-size: 12px; }.date-divider { padding-bottom: 8px; color: #7a857d; font-size: 12px; }.form-row button { padding: 8px 18px; color: white; border: 0; background: #214c39; cursor: pointer; font-size: 12px; font-weight: 600; }.form-row button:hover { background: #153b2a; }.validation-message { grid-column: 2; margin: 7px 0 0; color: #aa3327; font-size: 12px; }.result-row { grid-column: 2; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin-top: 13px; background: #d9dfd5; }.result-row div { padding: 9px 12px; background: #fffef9; }.result-row span { display: block; color: #758077; font-size: 10px; }.result-row strong { color: #1f4a37; font: 500 23px ui-monospace, monospace; }.result-row em { font: 400 11px "Noto Sans SC", "Microsoft YaHei", sans-serif; }
+    .legend { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 16px; padding-top: 14px; color: #526056; font-size: 10px; }.legend span { display: inline-flex; align-items: center; gap: 5px; }.swatch { display: inline-block; width: 10px; height: 10px; }.weekend-swatch { background: #fff2a9; }.bavaria-swatch { background: #bfe0fb; }.china-swatch { background: #ffd0ca; }.overlap-swatch { background: #c2e8ce; }.legend small { margin-left: auto; color: #879087; }
+    @media (max-width: 700px) { .planner-shell { padding: 0; }.print-sheet { padding: 22px 14px; }.page-header { align-items: flex-start; }.header-mark { display: none; }.days-grid { grid-auto-rows: 48px; }.day-cell { padding: 5px; }.holiday-name { font-size: 9px; }.planner-panel { grid-template-columns: 1fr; }.form-row { flex-wrap: wrap; }.form-row label { min-width: 120px; }.result-row, .validation-message { grid-column: 1; }.legend small { width: 100%; margin-left: 0; } }
+    @media print { @page { size: A4 landscape; margin: 9mm; } body, .planner-shell { min-height: 0; background: white; }.planner-shell { display: block; padding: 0; }.print-sheet { width: 100%; padding: 0; box-shadow: none; }.calendar-stack { gap: 10px; margin: 10px 0; }.days-grid { grid-auto-rows: 24px; }.day-cell { padding: 3px 6px; }.holiday-name { margin-top: 1px; font-size: 7px; }.planner-panel { padding: 12px 15px; }.legend { padding-top: 8px; } }
+  </style>
+</head>
+<body>
+  <main class="planner-shell">
+    <div class="print-sheet">
+      <header class="page-header"><div><p class="eyebrow">MUNICH · BAVARIA · CHINA</p><h1>年末假期计划</h1><p class="subtitle">2026 年 12 月 — 2027 年 2 月</p></div><div class="header-mark" aria-hidden="true"><span>2026</span><b>→</b><span>2027</span></div></header>
+      <div class="calendar-stack" id="calendars"></div>
+      <section class="planner-panel" aria-labelledby="leave-title">
+        <div class="panel-intro"><p class="section-kicker">LEAVE CALCULATOR</p><h2 id="leave-title">请假日期计算</h2><p>工作日按慕尼黑（巴伐利亚州）法定假期规则计算，不含周末。</p></div>
+        <div class="form-row"><label>开始日期<input id="start-date" type="date" min="2026-12-01" max="2027-02-28" value="2026-12-21"></label><span class="date-divider">至</span><label>结束日期<input id="end-date" type="date" min="2026-12-01" max="2027-02-28" value="2027-01-08"></label><button id="calculate-button" type="button">计算</button></div>
+        <p class="validation-message" id="validation-message" role="alert" hidden></p>
+        <div class="result-row" id="results" aria-live="polite"></div>
+      </section>
+      <footer class="legend"><span><i class="swatch weekend-swatch"></i>周末</span><span><i class="swatch bavaria-swatch"></i>慕尼黑 / 巴伐利亚法定假期</span><span><i class="swatch china-swatch"></i>中国法定假期</span><span><i class="swatch overlap-swatch"></i>两地重叠假期</span><small>法定假日颜色优先于周末颜色</small></footer>
+    </div>
+  </main>
+  <script>
+    const MONTHS = [{ year: 2026, month: 11, title: '2026 年 12 月', english: 'DECEMBER' }, { year: 2027, month: 0, title: '2027 年 1 月', english: 'JANUARY' }, { year: 2027, month: 1, title: '2027 年 2 月', english: 'FEBRUARY' }];
+    const HOLIDAYS = { '2026-12-25': { type: 'bavaria', name: '圣诞节' }, '2026-12-26': { type: 'bavaria', name: '圣诞节次日' }, '2027-01-01': { type: 'overlap', name: '元旦 / 新年' }, '2027-01-06': { type: 'bavaria', name: '三王节' }, '2027-02-06': { type: 'china', name: '春节' } };
+    const WEEKDAYS = ['一', '二', '三', '四', '五', '六', '日'];
+    const dateKey = (year, month, day) => `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    function toLocalDate(value) { if (!value) return null; const [year, month, day] = value.split('-').map(Number); return new Date(year, month - 1, day); }
+    function createMonth({ year, month, title, english }) {
+      const firstDay = new Date(year, month, 1); const leadingDays = (firstDay.getDay() + 6) % 7; const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const weekdayHeaders = WEEKDAYS.map((day, index) => `<div class="${index > 4 ? 'weekend-header' : ''}">${day}</div>`).join('');
+      const cells = Array.from({ length: leadingDays + daysInMonth }, (_, index) => {
+        if (index < leadingDays) return '<div class="day-cell empty"></div>';
+        const day = index - leadingDays + 1; const key = dateKey(year, month, day); const holiday = HOLIDAYS[key]; const isWeekend = ((leadingDays + day - 1) % 7) > 4;
+        return `<div class="day-cell${isWeekend ? ' weekend' : ''}${holiday ? ` ${holiday.type}` : ''}"><span class="day-number">${day}</span>${holiday ? `<span class="holiday-name">${holiday.name}</span>` : ''}</div>`;
+      }).join('');
+      return `<section class="month-card" aria-label="${title}"><div class="month-heading"><span class="month-label">${title}</span><span>${english}</span></div><div class="calendar-grid weekday-row">${weekdayHeaders}</div><div class="calendar-grid days-grid">${cells}</div></section>`;
+    }
+    document.getElementById('calendars').innerHTML = MONTHS.map(createMonth).join('');
+    function calculate() {
+      const start = toLocalDate(document.getElementById('start-date').value); const end = toLocalDate(document.getElementById('end-date').value); const error = document.getElementById('validation-message');
+      if (!start || !end) { error.textContent = '请选择完整的起止日期。'; error.hidden = false; return; }
+      if (start > end) { error.textContent = '结束日期需晚于或等于开始日期。'; error.hidden = false; return; }
+      error.hidden = true; let total = 0; let holidays = 0; let workdays = 0; const cursor = new Date(start);
+      while (cursor <= end) { total += 1; const key = dateKey(cursor.getFullYear(), cursor.getMonth(), cursor.getDate()); const isWeekend = cursor.getDay() === 0 || cursor.getDay() === 6; const isBavarianHoliday = Boolean(HOLIDAYS[key] && HOLIDAYS[key].type !== 'china'); if (isBavarianHoliday) holidays += 1; if (!isWeekend && !isBavarianHoliday) workdays += 1; cursor.setDate(cursor.getDate() + 1); }
+      document.getElementById('results').innerHTML = `<div><span>区间总天数</span><strong>${total}<em> 天</em></strong></div><div><span>法定假期天数</span><strong>${holidays}<em> 天</em></strong></div><div><span>工作日天数</span><strong>${workdays}<em> 天</em></strong></div>`;
+    }
+    document.getElementById('calculate-button').addEventListener('click', calculate); calculate();
+  </script>
+</body>
+</html>
